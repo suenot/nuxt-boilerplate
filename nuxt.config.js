@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {src: '~/plugins/vue-grid', ssr: false},
   ],
   /*
   ** Nuxt.js dev-modules
@@ -46,8 +47,13 @@ module.exports = {
     [
       'nuxt-i18n',
       {
-        locales: ['en', 'es'],
+        locales: ['en', 'ru', 'es'],
+        strategy: 'prefix_and_default',
         defaultLocale: 'en',
+        detectBrowserLanguage: {
+          useCookie: true,
+          cookieKey: 'i18n_redirected'
+        },
         vueI18n: {
           fallbackLocale: 'en',
           messages: {

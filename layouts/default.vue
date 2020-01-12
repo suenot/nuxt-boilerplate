@@ -1,117 +1,213 @@
 <template>
-  <v-app dark>
+  <v-app id="sandbox" :dark="true">
+
+    <!-- left drawer start -->
     <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
+      v-model="primaryDrawer.model"
+      :clipped="primaryDrawer.clipped"
+      :floating="primaryDrawer.floating"
+      :mini-variant="primaryDrawer.mini"
       app
+      overflow
     >
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+        <v-list-item-group>
+          <draggable v-model="navigationLeftTop" group="navigation">
+            <template v-for="item in navigationLeftTop">
+              <router-link :to="item.link" :key="`navigationLeftTop-${item.link}`" tag="div">
+                <v-list-item>
+                  <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-content v-on="on" class="mx-auto">
+                        <v-icon v-text="item.icon">mdi-heart</v-icon>
+                      </v-list-item-content>
+                    </template>
+                    <span v-text="item.tooltip"></span>
+                  </v-tooltip>
+                </v-list-item>
+                <v-divider></v-divider>
+              </router-link>
+            </template>
+          </draggable>
+
+          <v-spacer></v-spacer>
+          <v-divider></v-divider>
+          <draggable v-model="navigationLeftBottom" group="navigation">
+            <template v-for="item in navigationLeftBottom">
+              <router-link :to="item.link" :key="`navigationLeftBottom-${item.link}`" tag="div">
+                <v-list-item>
+                  <v-tooltip right>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-content v-on="on" class="mx-auto">
+                        <v-icon v-text="item.icon">mdi-heart</v-icon>
+                      </v-list-item-content>
+                    </template>
+                    <span v-text="item.tooltip"></span>
+                  </v-tooltip>
+                </v-list-item>
+                <v-divider></v-divider>
+              </router-link>
+            </template>
+          </draggable>
+        </v-list-item-group>
+
+
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
+    <!-- left drawer end -->
+
+    <!-- right drawer start -->
+    <v-divider></v-divider>
+    <v-navigation-drawer
+      v-model="primaryDrawer.model"
+      :clipped="primaryDrawer.clipped"
+      :floating="primaryDrawer.floating"
+      :mini-variant="primaryDrawer.mini"
       app
+      overflow
+      right
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
+      <v-list>
+        <v-list-item-group>
+          <draggable v-model="navigationRightTop" group="navigation">
+            <template v-for="item in navigationRightTop">
+              <router-link :to="item.link" :key="`menu-${item.link}`" tag="div">
+                <v-list-item>
+                  <v-tooltip left>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-content v-on="on" class="mx-auto">
+                        <v-icon v-text="item.icon">mdi-heart</v-icon>
+                      </v-list-item-content>
+                    </template>
+                    <span v-text="item.tooltip"></span>
+                  </v-tooltip>
+                </v-list-item>
+                <v-divider></v-divider>
+              </router-link>
+            </template>
+          </draggable>
+          <v-spacer></v-spacer>
+          <v-divider></v-divider>
+          <draggable v-model="navigationRightBottom" group="navigation">
+            <template v-for="item in navigationRightBottom">
+              <router-link :to="item.link" :key="`menu-${item.link}`" tag="div">
+                <v-list-item>
+                  <v-tooltip left>
+                    <template v-slot:activator="{ on }">
+                      <v-list-item-content v-on="on" class="mx-auto">
+                        <v-icon v-text="item.icon">mdi-heart</v-icon>
+                      </v-list-item-content>
+                    </template>
+                    <span v-text="item.tooltip"></span>
+                  </v-tooltip>
+                </v-list-item>
+                <v-divider></v-divider>
+              </router-link>
+            </template>
+          </draggable>
+        </v-list-item-group>
+
+
+
+
+      </v-list>
+    </v-navigation-drawer>
+    <!-- right drawer end -->
     <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
-      <span>&copy; 2019</span>
-    </v-footer>
+
   </v-app>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 export default {
-  data () {
-    return {
+  // storage: {
+  //   keys: ['navigationLeftTop', 'navigationLeftBottom', 'navigationRightTop', 'navigationRightBottom'],
+  //   namespace: 'app'
+  // },
+  data: () => ({
+    navigationLeftTop: [
+      {
+        link: '/crypto',
+        tooltip: 'CryptoHome',
+        icon: 'mdi-airplane',
+      },
+      {
+        link: '/freelance',
+        tooltip: 'FreelanceHome',
+        icon: 'mdi-heart',
+      },
+      {
+        link: '/freelance/project',
+        tooltip: 'ProjectPage',
+        icon: 'mdi-heart',
+      },
+    ],
+    navigationLeftBottom: [
+      {
+        link: '/signals',
+        tooltip: 'Signals',
+        icon: 'mdi-chess-pawn',
+      },
+      {
+        link: '/signal',
+        tooltip: 'Signal',
+        icon: 'mdi-chess-bishop',
+      },
+      {
+        link: '/magnify',
+        tooltip: 'Magnify',
+        icon: 'mdi-magnify',
+      },
+    ],
+    navigationRightTop: [
+      {
+        link: '/grid',
+        tooltip: 'Grid',
+        icon: 'mdi-chess-rook',
+      }
+    ],
+    navigationRightBottom: [],
+    primaryDrawer: {
+      model: null,
       clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
-    }
-  }
+      floating: false,
+      mini: true,
+    },
+    footer: {
+      inset: true,
+    },
+  }),
+  mounted() {
+    // this.$vuetify.theme.dark = true
+    // console.log(this.$vuetify.theme.isDark)
+  },
+  components: {
+    draggable,
+  },
+  methods: {}
 }
 </script>
+<style lang="sass" scoped>
+.v-list
+  padding: 0
+.v-item-group
+  height: 100vh
+  display: flex
+  flex-direction: column
+</style>
+
+<style lang="sass">
+// .v-data-table thead tr th
+//   white-space: nowrap
+</style>
+
+<style lang="sass">
+.v-input__append-inner
+  .v-btn
+    position: relative
+    top: -5px
+</style>
